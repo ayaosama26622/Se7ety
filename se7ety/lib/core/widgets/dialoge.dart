@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:lottie/lottie.dart';
+import 'package:se7ety/core/constants/image_app.dart';
 import 'package:se7ety/core/styles/colors.dart';
 
-enum DialogType { error, success }
+enum DialogType { success, error }
 
 void showMyDialog(
   BuildContext context,
@@ -12,16 +14,16 @@ void showMyDialog(
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
-      duration: const Duration(seconds: 300),
+      duration: const Duration(milliseconds: 600),
       margin: const EdgeInsets.all(10),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       backgroundColor: type == DialogType.error
-          ? AppColor.errorColor.withValues(alpha: 0.8)
+          ? AppColor.errorColor
           : Colors.green,
       content: Row(
         children: [
-          const Icon(Icons.error, color: AppColor.darkColor, size: 20),
+          const Icon(Icons.error, color: AppColor.whiteColor, size: 20),
           const Gap(10),
           Text(errorMsg),
         ],
@@ -35,10 +37,7 @@ void showLoadingDialog(BuildContext context) {
     context: context,
     barrierDismissible: false,
     barrierColor: AppColor.darkColor.withValues(alpha: 0.7),
-    builder: (context) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColor.primaryColor),
-      );
-    },
+    builder: (context) =>
+        Center(child: Lottie.asset(AppImages.loadingJson, width: 250)),
   );
 }

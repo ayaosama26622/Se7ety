@@ -3,19 +3,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class SharedPref {
   static late SharedPreferences pref;
 
-  static const String onboarding = 'onboarding';
-  static const String user = 'user';
+  static const String kOnboarding = 'onboarding';
+  static const String kUserId = 'user_id';
 
   static Future<void> init() async {
     pref = await SharedPreferences.getInstance();
   }
 
   static Future<bool> setOnboardingShown() {
-    return pref.setBool(onboarding, true);
+    return pref.setBool(kOnboarding, true);
   }
 
   static bool isOnboardingShown() {
-    return pref.getBool(onboarding) ?? false;
+    return pref.getBool(kOnboarding) ?? false;
+  }
+
+  static Future<void> cacheUserId(String userId) async {
+    await pref.setString(kUserId, userId);
+  }
+
+  static String getUserId() {
+    return pref.getString(kUserId) ?? '';
   }
 
   static Future<void> cacheData(String key, dynamic value) async {

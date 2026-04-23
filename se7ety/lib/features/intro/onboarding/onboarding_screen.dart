@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:se7ety/core/function/navigation.dart';
+import 'package:se7ety/core/functions/navigation.dart';
 import 'package:se7ety/core/routes/routes.dart';
-import 'package:se7ety/core/service/local/shared_pref.dart';
+import 'package:se7ety/core/services/local/shared_pref.dart';
 import 'package:se7ety/core/styles/colors.dart';
 import 'package:se7ety/core/styles/text.dart';
 import 'package:se7ety/core/widgets/custom_svg_picture.dart';
