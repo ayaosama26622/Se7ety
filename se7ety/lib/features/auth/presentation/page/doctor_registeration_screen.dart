@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:se7ety/core/constants/image_app.dart';
+import 'package:se7ety/core/constants/user_type_enum.dart';
 import 'package:se7ety/core/functions/navigation.dart';
+import 'package:se7ety/core/routes/routes.dart';
 import 'package:se7ety/core/styles/colors.dart';
 import 'package:se7ety/core/styles/text.dart';
 import 'package:se7ety/core/widgets/custom_text_from_field.dart';
@@ -25,7 +27,7 @@ class UpdateDoctorProfileScreen extends StatefulWidget {
 
 class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
   String? _imagePath;
-  
+
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -43,15 +45,16 @@ class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
   Widget build(BuildContext context) {
     var cubit = context.read<AuthCubit>();
     return BlocListener<AuthCubit, AuthState>(
-      listener: (context, state) {
+      listener: (ctx, state) {
         if (state is AuthLoadingState) {
-          showLoadingDialog(context);
+          showLoadingDialog(ctx);
         } else if (state is AuthSuccessState) {
-          pop(context);
+          Navigator.of(ctx, rootNavigator: true).pop();
+          pushToBase(ctx, Routes.login, extra: UserTypeEnum.doctor);
           log('success');
         } else if (state is AuthErrorState) {
-          pop(context);
-          showMyDialog(context, state.error);
+          Navigator.of(ctx, rootNavigator: true).pop();
+          showMyDialog(ctx, state.error);
         }
       },
       child: Scaffold(
@@ -161,7 +164,6 @@ class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
                         maxLines: 4,
                         hintText:
                             'سجل المعلومات الطبية العامة مثل تعليمك الأكاديمي وخبراتك السابقة...',
-
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'من فضلك ادخل النبذة التعريفية';
@@ -207,20 +209,12 @@ class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
             ),
           ),
         ),
-
         bottomNavigationBar: Container(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
           child: MainButton(
             onPressed: () async {
               if (cubit.formKey.currentState!.validate()) {
-                if (cubit.imageFile != null) {
-                  cubit.updateDoctor();
-                } else {
-                  showMyDialog(
-                    context,
-                    'من فضلك قم باختيار صورة الصفحة الشخصية',
-                  );
-                }
+                cubit.updateDoctor();
               }
             },
             text: "التسجيل",
@@ -290,12 +284,10 @@ class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
                     color: AppColor.primaryColor,
                   ),
                 ),
-
                 hintText: '00:00',
               ),
             ),
             const SizedBox(width: 10),
-
             Expanded(
               child: CustomTextFormField(
                 readOnly: true,
@@ -316,7 +308,6 @@ class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
                     color: AppColor.primaryColor,
                   ),
                 ),
-
                 hintText: '00:00',
               ),
             ),

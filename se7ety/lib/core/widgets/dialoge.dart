@@ -14,7 +14,7 @@ void showMyDialog(
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 800),
       margin: const EdgeInsets.all(10),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

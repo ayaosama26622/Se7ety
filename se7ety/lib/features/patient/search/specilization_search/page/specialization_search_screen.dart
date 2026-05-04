@@ -20,31 +20,31 @@ class SpecializationSearchScreen extends StatelessWidget {
         title: Text(specialization),
       ),
       body: FutureBuilder(
-        future: FirebaseProvider.getDoctors(),
+        future: FirebaseProvider.getDoctorsBySpecialization(specialization),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return snapshot.data?.docs.isEmpty == true
-              ? EmptyWidget()
-              : Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: snapshot.data?.docs.length,
-                    itemBuilder: (context, index) {
-                      DoctorModel doctor = DoctorModel.fromJson(
-                        snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>,
-                      );
-                      if (doctor.specialization == '' ||
-                          doctor.specialization == null) {
-                        return const SizedBox();
-                      }
-                      return DoctorCard(doctor: doctor);
-                    },
-                  ),
+            return const Center(
+              child: CircularProgressIndicator(
+                value: .9,
+                color: Colors.black12,
+              ),
+            );
+          } else {
+            if (snapshot.data?.docs.isEmpty == true) {
+              return EmptyWidget();
+            }
+            return ListView.builder(
+              itemCount: snapshot.data?.docs.length,
+              padding: const EdgeInsets.all(20),
+              itemBuilder: (context, index) {
+                DoctorModel doctor = DoctorModel.fromJson(
+                  snapshot.data?.docs[index].data() as Map<String, dynamic>,
                 );
+
+                return DoctorCard(doctor: doctor);
+              },
+            );
+          }
         },
       ),
     );

@@ -1,10 +1,8 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:se7ety/core/services/firebase/firestore_provider.dart';
 import 'package:se7ety/core/widgets/card/doctor_card.dart';
 import 'package:se7ety/features/auth/data/model/doctor_model.dart';
-
 
 
 
@@ -33,10 +31,7 @@ class _TopRatedListState extends State<TopRatedList> {
             return ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: snapshot
-                  .data
-                  ?.docs
-                  .length,
+              itemCount: snapshot.data?.docs.length,
               itemBuilder: (context, index) {
                 DoctorModel doctor = DoctorModel.fromJson(
                   snapshot.data?.docs[index].data() as Map<String, dynamic>,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:se7ety/core/functions/navigation.dart';
+import 'package:se7ety/core/routes/routes.dart';
 import 'package:se7ety/core/styles/colors.dart';
 import 'package:se7ety/core/styles/text.dart';
 import 'package:se7ety/features/auth/data/model/doctor_model.dart';
@@ -8,29 +10,31 @@ class DoctorCard extends StatelessWidget {
 
   final DoctorModel doctor;
   final bool isClickable;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 0),
-      margin: const EdgeInsets.only(top: 10),
-      width: double.infinity,
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(-3, 0),
-            blurRadius: 15,
-            color: Colors.grey.withOpacity(.1),
-          ),
-        ],
-      ),
-      child: InkWell(
-        onTap: () {
-          if (isClickable) {
-          }
-        },
+    return GestureDetector(
+      onTap: () {
+        if (isClickable) {
+          pushTo(context, Routes.doctorProfile, extra: doctor);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 0),
+        margin: const EdgeInsets.only(top: 10),
+        width: double.infinity,
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.blue[50],
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(-3, 0),
+              blurRadius: 15,
+              color: Colors.grey.withOpacity(.1),
+            ),
+          ],
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -43,12 +47,20 @@ class DoctorCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   color: AppColor.whiteColor,
                 ),
-                child: Image.network(
-                  doctor.imageUrl ?? '',
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.contain,
-                ),
+                child: (doctor.imageUrl != null && doctor.imageUrl!.isNotEmpty)
+                    ? Image.network(
+                        doctor.imageUrl!,
+                        height: 50,
+                        width: 50,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.person, size: 40),
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: 40,
+                        color: AppColor.primaryColor,
+                      ),
               ),
             ),
             const SizedBox(width: 20),

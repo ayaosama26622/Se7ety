@@ -34,22 +34,31 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
-      listener: (context, state) {
+      listener: (ctx, state) {
         if (state is AuthLoadingState) {
-          showLoadingDialog(context);
+          showLoadingDialog(ctx);
         } else if (state is AuthSuccessState) {
+          Navigator.of(ctx, rootNavigator: true).pop();
           if (state.userType == UserTypeEnum.patient) {
-            pushToBase(context, Routes.patientMainApp);
-          } else {}
+            pushToBase(ctx, Routes.patientMainApp);
+          } else {
+            pushToBase(ctx, Routes.patientMainApp);
+          }
         } else if (state is AuthErrorState) {
-          pop(context);
-          showMyDialog(context, state.error);
+          Navigator.of(ctx, rootNavigator: true).pop();
+          showMyDialog(ctx, state.error);
         }
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColor.whiteColor,
-          leading: const BackButton(color: AppColor.primaryColor),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: AppColor.primaryColor,
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
         body: _loginForm(context),
       ),
@@ -81,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.end,
                   controller: cubit.emailController,
                   hintText: 'Sayed@example.com',
-                  prefixIcon: Icon(Icons.email_rounded),
+                  prefixIcon: const Icon(Icons.email_rounded),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value!.isEmpty) {
